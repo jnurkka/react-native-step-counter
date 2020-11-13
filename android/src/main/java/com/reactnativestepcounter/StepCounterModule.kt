@@ -7,33 +7,28 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 class StepCounterModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   private val mReactContext = reactContext;
   override fun getName(): String = "StepCounter"
-  private fun logValueChange(values: FloatArray) {
-    val joinedValues = values.joinToString();
-    Log.d("StepCounter", joinedValues)
+
+  private fun emitStep(timestamp: Long) {
+    Log.d("StepCounter", "Registered a step")
     try {
       mReactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        .emit("AccelerometerChange", joinedValues)
+        .emit("StepRegistered", timestamp.toString())
     } catch (e: RuntimeException) {
-      Log.e("ERROR", "java.lang.RuntimeException: Trying to invoke Javascript before CatalystInstance has been set!")
+      Log.e("StepCounter - ERROR", "java.lang.RuntimeException: Trying to invoke Javascript before CatalystInstance has been set!")
     }
   }
-  var listener = SensorListener(reactContext, ::logValueChange);
+
+  var listener = StepListener(mReactContext, ::emitStep);
 
   @ReactMethod
   fun start() {
-    Log.d("StepCounter", "Starting accelerometer")
     listener.startListening();
-  }
-
-  fun stop () {
-    Log.d("StepCounter", "Stopping accelerometer")
-    listener.stopListening();
+    Log.d("StepCounter", "Started listening to steps using accelerometer")
   }
 
   @ReactMethod
-  fun multiply(a: Int, b: Int, promise: Promise) {
-
-    promise.resolve(a * b)
-
+  fun stop() {
+    listener.stopListening();
+    Log.d("StepCounter", "Stopped listening to steps using accelerometer")
   }
 }

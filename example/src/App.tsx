@@ -1,25 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import StepCounter, { useAccelerometer } from 'react-native-step-counter';
+import StepCounter, { useStepListener } from 'react-native-step-counter';
+
+StepCounter.start();
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [result, setResult] = React.useState<string | undefined>();
 
-  const removeListener = useAccelerometer((values) => {
-    setResult(values[0]);
+  useStepListener((timestamp: string) => {
+    const stepDate = new Date(parseInt(timestamp, 10)).toISOString();
+    setResult(stepDate);
   });
-
-  React.useEffect(() => {
-    StepCounter.start();
-    return () => {
-      removeListener();
-      StepCounter.stop();
-    };
-  }, [removeListener]);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Last step at: {result}</Text>
     </View>
   );
 }

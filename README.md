@@ -11,15 +11,14 @@ npm install react-native-step-counter
 ## Usage
 
 ```js
-import StepCounter, { useAccelerometer } from 'react-native-step-counter';
-
-// ...
-
-// create a listener that receives a callback when accelerometer returns new values, the return value of this hook is a cleanup function
-const removeListener = useAccelerometer(callback);
+import StepCounter, { useStepListener } from 'react-native-step-counter';
 
 // call start to start listening to values from accelerometer
 StepCounter.start();
+
+// create a listener that receives a callback when accelerometer returns new values, the return value of this hook is a cleanup function
+// note that you have to have called start() before starting the listener, otherwise it wont work
+const removeListener = useStepListener(callback);
 
 // somwhere later you can stop listening to values
 removeListener();
