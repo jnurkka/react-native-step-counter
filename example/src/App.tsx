@@ -7,8 +7,8 @@ StepCounter.start();
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
 
-  useStepListener((timestamp: string) => {
-    const stepDate = new Date(parseInt(timestamp, 10)).toISOString();
+  useStepListener((timestamp: number) => {
+    const stepDate = new Date(timestamp).toISOString();
     setResult(stepDate);
   });
 

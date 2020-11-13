@@ -7,11 +7,11 @@ type StepCounterType = {
 
 const { StepCounter } = NativeModules;
 
-export const useStepListener = (onStep: (timestamp: string) => void) => {
+export const useStepListener = (onStep: (timestamp: number) => void) => {
   const eventEmitter = new NativeEventEmitter(StepCounter);
   const eventListener = eventEmitter.addListener(
     'StepRegistered',
-    (timestamp) => onStep(timestamp)
+    (timestamp) => onStep(Number(timestamp))
   );
   return () => {
     eventListener.remove();
