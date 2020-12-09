@@ -63,7 +63,6 @@ class StepListener(mContext: ReactApplicationContext, onStep: (timestamp: Long) 
   }
 
   fun startListening() {
-    Log.d("StepCounter", "Starting listener")
     mSensorManager!!.registerListener(this, mAccelerometer,
       SensorManager.SENSOR_DELAY_NORMAL)
   }

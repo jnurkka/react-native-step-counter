@@ -5,16 +5,18 @@ import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
 class StepCounterModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+  const val LOG_TAG = "RNStepCounter";
   private val mReactContext = reactContext;
+
   override fun getName(): String = "StepCounter"
 
   private fun emitStep(timestamp: Long) {
-    Log.d("StepCounter", "Registered a step")
+    Log.d(LOG_TAG, "Registered a step")
     try {
       mReactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
         .emit("StepRegistered", timestamp.toString())
     } catch (e: RuntimeException) {
-      Log.e("StepCounter - ERROR", "java.lang.RuntimeException: Trying to invoke Javascript before CatalystInstance has been set!")
+      Log.e(LOG_TAG, "java.lang.RuntimeException: Trying to invoke Javascript before CatalystInstance has been set!")
     }
   }
 
@@ -23,12 +25,12 @@ class StepCounterModule(reactContext: ReactApplicationContext) : ReactContextBas
   @ReactMethod
   fun start() {
     listener.startListening();
-    Log.d("StepCounter", "Started listening to steps using accelerometer")
+    Log.d(LOG_TAG, "Started listening to steps using accelerometer")
   }
 
   @ReactMethod
   fun stop() {
     listener.stopListening();
-    Log.d("StepCounter", "Stopped listening to steps using accelerometer")
+    Log.d(LOG_TAG, "Stopped listening to steps using accelerometer")
   }
 }
